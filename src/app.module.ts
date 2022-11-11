@@ -7,6 +7,7 @@ import { DatabaseConfig } from './config/database.config';
 import { MicroserviceConfig } from './config/microservice.config';
 import { AuthModule } from './modules/auth/auth.module';
 import { LoanModule } from './modules/loan/loan.module';
+import { AccountModule } from './modules/account/account.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { LoanModule } from './modules/loan/loan.module';
     }),
     LoanModule,
     AuthModule,
+    AccountModule,
   ],
   controllers: [AppController],
   providers: [],

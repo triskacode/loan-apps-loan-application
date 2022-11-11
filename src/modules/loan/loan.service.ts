@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { AccountService } from '../account/account.service';
 import { CreateLoanDto } from './dto/create-loan.dto';
 import { Loan } from './entities/loan.entity';
 import { LoanRepository } from './loan.repository';
@@ -6,7 +7,10 @@ import { LoanState } from './loan.types';
 
 @Injectable()
 export class LoanService {
-  constructor(private loanRepository: LoanRepository) {}
+  constructor(
+    private loanRepository: LoanRepository,
+    private accountService: AccountService,
+  ) {}
 
   async create(dto: CreateLoanDto, user_id: number): Promise<Loan> {
     const entity = new Loan();
@@ -25,6 +29,7 @@ export class LoanService {
     const result = await this.loanRepository.update(entity, {
       state: LoanState.APPROVED,
     });
+    this.accountService.emitLoanApproved(result);
 
     return result;
   }
