@@ -71,7 +71,7 @@ export class LoanController {
   @Get('my-loan')
   @Roles(UserRole.USER)
   @UseGuards(AuthGuard, RolesGuard)
-  myLoan(@CurrentUser() user: User) {
-    return this.loanService.findAll({ user_id: user.id });
+  myLoan(@CurrentUser() user: User, @Query() filter: FilterFindAllLoanDto) {
+    return this.loanService.findAll({ user_id: user.id, ...filter });
   }
 }
