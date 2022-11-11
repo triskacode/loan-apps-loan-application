@@ -1,4 +1,4 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Logger } from '@nestjs/common';
 import { EventPattern } from '@nestjs/microservices';
 import { HandleUserActivatedDto } from './dto/handle-user-activated.dto';
 import { HandleUserDeletedDto } from './dto/handle-user-deleted.dto';
@@ -10,20 +10,35 @@ export class PrivateUserMicroserviceController {
   constructor(private privateUserService: PrivateUserService) {}
 
   @EventPattern('user-activated')
-  handleUserActivated(dto: HandleUserActivatedDto) {
-    console.log('user-activated');
-    this.privateUserService.create(dto).then(console.log);
+  async handleUserActivated(dto: HandleUserActivatedDto) {
+    try {
+      Logger.debug(
+        'handle user-activated',
+        'PrivateUserMicroserviceController',
+      );
+      await this.privateUserService.create(dto).then(console.log);
+    } catch (err) {
+      Logger.error(err.message, 'PrivateUserMicroserviceController');
+    }
   }
 
   @EventPattern('user-updated')
-  handleUserUpdated(dto: HandleUserUpdatedDto) {
-    console.log('user-updated');
-    this.privateUserService.update(dto.id, dto).then(console.log);
+  async handleUserUpdated(dto: HandleUserUpdatedDto) {
+    try {
+      Logger.debug('handle user-updated', 'PrivateUserMicroserviceController');
+      await this.privateUserService.update(dto.id, dto).then(console.log);
+    } catch (err) {
+      Logger.error(err.message, 'PrivateUserMicroserviceController');
+    }
   }
 
   @EventPattern('user-deleted')
-  handleUserDeleted(dto: HandleUserDeletedDto) {
-    console.log('user-deleted');
-    this.privateUserService.delete(dto.id).then(console.log);
+  async handleUserDeleted(dto: HandleUserDeletedDto) {
+    try {
+      Logger.debug('handle user-deleted', 'PrivateUserMicroserviceController');
+      await this.privateUserService.delete(dto.id).then(console.log);
+    } catch (err) {
+      Logger.error(err.message, 'PrivateUserMicroserviceController');
+    }
   }
 }
