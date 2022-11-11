@@ -3,19 +3,18 @@ import {
   CreateDateColumn,
   Entity,
   Index,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { LoanState } from '../loan.types';
+import { PrivateUser } from '../../private-user/entities/private-user.entity';
 
 @Entity()
 export class Loan {
   @PrimaryGeneratedColumn()
   id: number;
-
-  @Column()
-  @Index()
-  user_id!: number;
 
   @Column()
   amount!: number;
@@ -28,4 +27,14 @@ export class Loan {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @ManyToOne(() => PrivateUser, (entity: PrivateUser) => entity.id, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'user_id' })
+  user: PrivateUser;
+
+  @Column({ name: 'user_id' })
+  @Index()
+  user_id: PrivateUser['id'];
 }

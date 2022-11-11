@@ -1,5 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { User } from 'src/domain/user';
 import { AccountService } from '../account/account.service';
+import { PrivateUser } from '../private-user/entities/private-user.entity';
+import { PrivateUserRepository } from '../private-user/private-user.repository';
 import { CreateLoanDto } from './dto/create-loan.dto';
 import { Loan } from './entities/loan.entity';
 import { LoanRepository } from './loan.repository';
@@ -9,13 +12,24 @@ import { LoanState } from './loan.types';
 export class LoanService {
   constructor(
     private loanRepository: LoanRepository,
+    private privateUserRepository: PrivateUserRepository,
     private accountService: AccountService,
   ) {}
 
-  async create(dto: CreateLoanDto, user_id: number): Promise<Loan> {
+  async create(dto: CreateLoanDto, remoteUser: User): Promise<Loan> {
+    let privateUser = await this.privateUserRepository.findById(remoteUser.id);
+
+    if (!privateUser) {
+      const privateUserEntity = new PrivateUser();
+      privateUser.id = remoteUser.id;
+      privateUser.email = remoteUser.email;
+
+      privateUser = await this.privateUserRepository.create(privateUserEntity);
+    }
+
     const entity = new Loan();
 
-    entity.user_id = user_id;
+    entity.user_id = privateUser.id;
     entity.amount = dto.amount;
 
     return this.loanRepository.create(entity);

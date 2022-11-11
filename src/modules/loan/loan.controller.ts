@@ -1,28 +1,28 @@
 import {
-  Controller,
-  Post,
   Body,
-  UseInterceptors,
-  UseFilters,
-  UseGuards,
-  Patch,
-  Param,
-  Query,
-  NotFoundException,
+  Controller,
   Delete,
   Get,
+  NotFoundException,
+  Param,
+  Patch,
+  Post,
+  Query,
+  UseFilters,
+  UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
-import { LoanService } from './loan.service';
-import { CreateLoanDto } from './dto/create-loan.dto';
+import { CurrentUser } from 'src/common/decorators/current-user.decorator';
+import { Roles } from 'src/common/decorators/roles.decorator';
 import { HttpExceptionFilter } from 'src/common/filters/http-exception.filter';
-import { TransformResponseInterceptor } from 'src/common/interceptors/transform-response.interceptor';
-import { User, UserRole } from 'src/domain/user';
 import { AuthGuard } from 'src/common/guards/auth.guard';
 import { RolesGuard } from 'src/common/guards/roles.guard';
-import { Roles } from 'src/common/decorators/roles.decorator';
-import { CurrentUser } from 'src/common/decorators/current-user.decorator';
-import { ParamIdDto } from './dto/param-id.dto';
+import { TransformResponseInterceptor } from 'src/common/interceptors/transform-response.interceptor';
+import { User, UserRole } from 'src/domain/user';
+import { CreateLoanDto } from './dto/create-loan.dto';
 import { FilterFindAllLoanDto } from './dto/filter-find-all-loan.dto';
+import { ParamIdDto } from './dto/param-id.dto';
+import { LoanService } from './loan.service';
 
 @Controller('loan')
 @UseInterceptors(TransformResponseInterceptor)
@@ -34,7 +34,7 @@ export class LoanController {
   @Roles(UserRole.USER)
   @UseGuards(AuthGuard, RolesGuard)
   create(@Body() createLoanDto: CreateLoanDto, @CurrentUser() user: User) {
-    return this.loanService.create(createLoanDto, user.id);
+    return this.loanService.create(createLoanDto, user);
   }
 
   @Patch(':id')

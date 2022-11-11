@@ -8,6 +8,7 @@ import { MicroserviceConfig } from './config/microservice.config';
 import { AuthModule } from './modules/auth/auth.module';
 import { LoanModule } from './modules/loan/loan.module';
 import { AccountModule } from './modules/account/account.module';
+import { PrivateUserModule } from './modules/private-user/private-user.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { AccountModule } from './modules/account/account.module';
     LoanModule,
     AuthModule,
     AccountModule,
+    PrivateUserModule,
   ],
   controllers: [AppController],
   providers: [],

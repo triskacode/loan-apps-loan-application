@@ -31,11 +31,12 @@ export class LoanRepository {
     query?: Partial<Pick<Loan, 'state' | 'user_id'>>,
   ): Promise<Loan[]> {
     return this.repository
-      .createQueryBuilder('user')
+      .createQueryBuilder('loan')
       .where({
         ...(query?.user_id !== undefined ? { user_id: query.user_id } : {}),
         ...(query?.state !== undefined ? { state: query.state } : {}),
       })
+      .leftJoinAndSelect('loan.user', 'user')
       .getMany();
   }
 
