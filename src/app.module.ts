@@ -21,10 +21,10 @@ import { PrivateUserModule } from './modules/private-user/private-user.module';
       useFactory: (configService: ConfigService) => ({
         type: 'better-sqlite3',
         database: configService.get('database.name'),
-        autoLoadEntities: true,
         logger: 'advanced-console',
+        autoLoadEntities: true,
         synchronize: true,
-        logging: true,
+        logging: configService.get('app.env') === 'development' ? true : false,
       }),
     }),
     LoanModule,
