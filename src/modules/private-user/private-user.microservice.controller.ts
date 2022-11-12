@@ -16,7 +16,7 @@ export class PrivateUserMicroserviceController {
         'handle user-activated',
         'PrivateUserMicroserviceController',
       );
-      await this.privateUserService.create(dto).then(console.log);
+      await this.privateUserService.create(dto);
     } catch (err) {
       Logger.error(err.message, 'PrivateUserMicroserviceController');
     }
@@ -26,7 +26,7 @@ export class PrivateUserMicroserviceController {
   async handleUserUpdated(dto: HandleUserUpdatedDto) {
     try {
       Logger.debug('handle user-updated', 'PrivateUserMicroserviceController');
-      await this.privateUserService.update(dto.id, dto).then(console.log);
+      await this.privateUserService.update(dto.id, dto);
     } catch (err) {
       Logger.error(err.message, 'PrivateUserMicroserviceController');
     }
@@ -36,7 +36,7 @@ export class PrivateUserMicroserviceController {
   async handleUserDeleted(dto: HandleUserDeletedDto) {
     try {
       Logger.debug('handle user-deleted', 'PrivateUserMicroserviceController');
-      await this.privateUserService.delete(dto.id).then(console.log);
+      await this.privateUserService.delete(dto.id);
     } catch (err) {
       Logger.error(err.message, 'PrivateUserMicroserviceController');
     }
